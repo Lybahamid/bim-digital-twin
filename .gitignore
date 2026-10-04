@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.venv/
+build/
+dist/
+
+# Data and weights (use DVC)
+/data/
+/outputs/
+/runs/
+/wandb/
+*.pt
+*.pth
+*.onnx
+*.engine
+*.ckpt
+*.blend1
+
+# Tooling
+graphify-out/
+.env
+.vscode/
+.idea/
+.claude/settings.local.json

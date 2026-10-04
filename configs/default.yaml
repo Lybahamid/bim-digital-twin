@@ -1,0 +1,4 @@
+device: cpu   # GPU is opt-in: set to cuda
+paths:
+  data: data
+  outputs: outputs

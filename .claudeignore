@@ -1,0 +1,10 @@
+/data/
+outputs/
+runs/
+wandb/
+graphify-out/
+*.pt
+*.onnx
+*.engine
+*.ckpt
+.git/

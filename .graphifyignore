@@ -1,0 +1,12 @@
+/data/
+outputs/
+runs/
+wandb/
+graphify-out/
+.git/
+.agents/
+.claude/
+*.pt
+*.onnx
+*.engine
+*.ckpt
