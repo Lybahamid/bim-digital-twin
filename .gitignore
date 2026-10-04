@@ -9,10 +9,10 @@ build/
 dist/
 
 # Data and weights (use DVC)
-data/
-outputs/
-runs/
-wandb/
+/data/
+/outputs/
+/runs/
+/wandb/
 *.pt
 *.pth
 *.onnx
