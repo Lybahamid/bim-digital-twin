@@ -1,0 +1,25 @@
+name: bimtwin
+channels:
+  - conda-forge
+  - pytorch
+  - nvidia
+dependencies:
+  - python=3.11
+  - numpy
+  - scipy
+  - pyyaml
+  - opencv
+  - open3d
+  - ifcopenshell
+  - pytorch
+  - pytorch-cuda=12.1
+  - torchvision
+  - onnx
+  - pytest
+  - ruff
+  - colmap  # verify the build has CUDA support (needed for dense reconstruction)
+  - pip
+  - pip:
+      - -e .
+      - ultralytics
+      - onnxruntime-gpu

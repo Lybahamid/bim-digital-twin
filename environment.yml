@@ -1,0 +1,22 @@
+name: bimtwin
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - python=3.11
+  - numpy
+  - scipy
+  - pyyaml
+  - opencv
+  - open3d
+  - ifcopenshell
+  - pytorch
+  - cpuonly
+  - torchvision
+  - onnx
+  - onnxruntime
+  - pytest
+  - ruff
+  - pip
+  - pip:
+      - -e .
