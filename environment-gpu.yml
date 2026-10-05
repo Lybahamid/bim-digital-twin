@@ -8,9 +8,6 @@ dependencies:
   - numpy
   - scipy
   - pyyaml
-  - opencv
-  - open3d
-  - ifcopenshell
   - pytorch
   - pytorch-cuda=12.1
   - torchvision
@@ -20,6 +17,9 @@ dependencies:
   - colmap  # verify the build has CUDA support (needed for dense reconstruction)
   - pip
   - pip:
+      - opencv-python-headless  # pip, not conda: conda opencv pulls vtk -> viskores, which fails to extract on Windows
+      - open3d
+      - ifcopenshell  # pip: the conda build pulls vtk -> viskores
       - -e .
       - ultralytics
       - onnxruntime-gpu
