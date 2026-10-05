@@ -1,22 +1,22 @@
 name: bimtwin
 channels:
   - conda-forge
-  - pytorch
+  - pytorch=2.13
 dependencies:
   - python=3.11
-  - numpy
+  - numpy=2.4
   - scipy
   - pyyaml
-  - opencv
-  - open3d
-  - ifcopenshell
-  - pytorch
+  - pytorch=2.13
   - cpuonly
-  - torchvision
-  - onnx
-  - onnxruntime
+  - torchvision=0.28
+  - onnx=1.23
+  - onnxruntime=1.30
   - pytest
   - ruff
   - pip
   - pip:
+      - opencv-python-headless==5.0.0.93  # pip, not conda: conda opencv pulls vtk -> viskores, which fails to extract on Windows
+      - open3d==0.20.0
+      - ifcopenshell==0.9.0  # pip: the conda build pulls vtk -> viskores
       - -e .
