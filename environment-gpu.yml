@@ -1,22 +1,22 @@
 name: bimtwin
 channels:
   - conda-forge
-  - pytorch
   - nvidia
 dependencies:
   - python=3.11
+  - blas=*=openblas  # force OpenBLAS, not MKL: MKL's LAPACK (e.g. np.linalg.det, used in src/bimtwin/common/transforms.py) hard-crashes with an illegal instruction on AMD CPUs (confirmed on Ryzen 7000-series with MKL 2024.2.2, 2025.3.1, and 2026.1.0)
   - numpy
   - scipy
   - pyyaml
-  - pytorch
-  - pytorch-cuda=12.1
-  - torchvision
   - onnx
   - pytest
   - ruff
   - colmap  # verify the build has CUDA support (needed for dense reconstruction)
   - pip
   - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cu128
+      - torch  # from the official CUDA wheel index, not conda-forge: conda-forge's Windows CUDA pytorch build is only available linked against MKL (see blas pin above), and its pytorch-cuda=12.1 metapackage no longer has matching builds. The pip wheel bundles its own isolated CUDA/BLAS runtime and avoids both problems.
+      - torchvision
       - opencv-python-headless  # pip, not conda: conda opencv pulls vtk -> viskores, which fails to extract on Windows
       - open3d
       - ifcopenshell  # pip: the conda build pulls vtk -> viskores

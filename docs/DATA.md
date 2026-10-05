@@ -39,3 +39,5 @@ python -m bimtwin.data.ppe          # data/processed/ppe/ + stats.json
 
 ## Windows note
 Run Python from an activated environment (`mamba activate bimtwin`). Calling the env's `python.exe` directly leaves conda's `Library\bin` off PATH and numpy matrix maths crashes with exit code 0xc06d007f.
+
+If matrix maths (e.g. `np.linalg.det`, used in `is_valid_pose`) still crashes with `0xc06d007f` on a properly activated env, it's not a PATH problem: Intel MKL's LAPACK has a CPU-dispatch bug that hard-crashes on AMD CPUs (confirmed on Ryzen 7000-series, MKL 2024.2.2 through 2026.1.0). `environment-gpu.yml` pins `blas=*=openblas` to avoid MKL entirely — if you hit this on `environment.yml`/`environment.lock.yml` instead, add the same `blas=*=openblas` pin there.
