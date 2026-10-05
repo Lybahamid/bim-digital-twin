@@ -13,3 +13,10 @@ Contracts between modules. All geometry follows [CONVENTIONS.md](CONVENTIONS.md)
 | `SafetyAlert` | `timestamp`, `track_id`, `hazard_id`, `distance_m`, `reason` | safety | alert log (CSV/JSONL) |
 
 File formats: poses and statuses as JSON/JSONL, point clouds as PLY, meshes as OBJ/IFC, alerts as JSONL.
+
+## Data files (weeks 2-3)
+- `elements.json` records: `guid`, `ifc_class` (IfcSlab/IfcColumn/IfcWall), `name`, `storey`, `elevation_m`, `bbox_min`, `bbox_max`, `height_m`. Meshes in `elements.npz` as `<guid>__v` / `<guid>__f` (metres, world frame).
+- `schedule_plan.csv`: `guid, planned_start, planned_finish` (project days). `schedule_actual.csv`: `guid, actual_start, actual_finish`.
+- `epoch_NN/gt_status.csv`: `guid, status, fraction, planned_finish, overdue_days, delayed`. `ElementStatus` predictions are scored against it.
+- `epoch_NN/cameras.json`: `width, height, K, frames[{id, T_wc}]` with `T_wc` camera-to-world, OpenCV axes. Details in [BLENDER_HANDOFF.md](BLENDER_HANDOFF.md).
+

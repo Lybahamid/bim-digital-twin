@@ -14,4 +14,4 @@
 ## Repo
 - Never commit data, weights or `graphify-out/`. Data goes through DVC.
 - Branch per task, PR to `main`, tests must pass.
-- Dates in schedules and logs use ISO 8601 (`YYYY-MM-DD`).
+- Schedules use integer project days (day 0 = project start). Logs and alert files use ISO 8601 timestamps.
