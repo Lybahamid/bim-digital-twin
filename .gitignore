@@ -13,6 +13,7 @@ dist/
 /outputs/
 /runs/
 /wandb/
+/datasets/
 *.pt
 *.pth
 *.onnx
