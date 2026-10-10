@@ -6,11 +6,12 @@ Project overview for a two-person team. A computer vision pipeline that tracks c
 
 Construction progress and safety are checked by hand, which is slow, subjective and misses issues between inspections. We build a pipeline that takes site images or video and compares what has actually been built (as-built) with the building design and schedule (as-planned, the BIM).
 
-The system answers three questions automatically:
+The system answers four questions automatically:
 
 - **What is built, and what is delayed?** Per-element status against the schedule.
 - **How much material is in place?** Volume estimates.
 - **Is anyone in danger?** Workers without proper PPE near hazards, with real distances.
+- **Can I ask about it and get a straight answer?** A conversational VLM advisor that narrates and discusses the above, not just a static report (Module 4, see [VLM_ADVISOR.md](VLM_ADVISOR.md)).
 
 ## 2. The Modules
 
@@ -88,11 +89,18 @@ We use real public data wherever it exists, and synthetic data only where it doe
 
 The Blender scope is deliberately small: about 10 building elements, 5 to 8 dates, roughly 2 weeks of work.
 
+**VLM advisor data:** not yet decided. Depends on the open "replace vs. augment"
+question in [VLM_ADVISOR.md](VLM_ADVISOR.md) -- an advisor that only narrates
+existing `ElementStatus`/`SafetyAlert` output may need little to no extra
+training data; one that judges status directly from imagery would need its
+own labelled/fine-tuning data, which isn't scoped yet.
+
 ## 4. Tech Stack
 
 - **3D:** COLMAP, Open3D (FPFH + RANSAC, then robust ICP), IFC format with IfcOpenShell
 - **Synthetic data:** Blender
 - **Deep learning:** PyTorch, YOLO11, ByteTrack, BoT-SORT, Depth Anything V2 (metric)
+- **VLM advisor:** small/edge-deployable vision-language model (not yet chosen); local-only vs. pluggable hosted-API backend is open -- see [VLM_ADVISOR.md](VLM_ADVISOR.md)
 - **Edge:** ONNX, TensorRT / OpenVINO
 - **Engineering:** Python, conda, Git and GitHub, DVC, Weights & Biases, GitHub Actions
 
@@ -121,6 +129,12 @@ We will not use Docker for day-to-day development. It takes a lot of disk space,
 
 Weeks 4 to 7 usually overrun, so weeks 13 and 14 are protected for writing. If we fall behind, we cut stretch goals first.
 
+**Module 4 (VLM advisor) is not yet placed in this timeline.** It's real
+additional scope on top of an already-tight 14 weeks, not a free extension of
+an existing phase -- whether it slots into weeks 8-11 alongside analytics/edge
+work, gets its own weeks, or is treated as a stretch goal cut if time runs
+short, is an open scheduling decision, not a technical one.
+
 ## 7. Success Targets and Deliverables
 
 Starting targets on synthetic data (adjust after the first baseline):
@@ -132,5 +146,6 @@ Starting targets on synthetic data (adjust after the first baseline):
 - Tracking: compare two trackers (HOTA, ID switches)
 - Distance to hazard: error reported by range
 - Edge: at least 15 FPS on the target device, with the INT8 accuracy drop reported honestly
+- VLM advisor: not yet defined -- depends on the open questions in [VLM_ADVISOR.md](VLM_ADVISOR.md) (what it's actually judging, and against what ground truth)
 
-Final deliverables: an open-source repository with a one-command pipeline and a Dockerfile checked by GitHub Actions, a before/after edge benchmark chart, a demo video, and a README written like a short research paper.
+Final deliverables: an open-source repository with a one-command pipeline and a Dockerfile checked by GitHub Actions, a before/after edge benchmark chart, a demo video, a conversational VLM advisor demo, and a README written like a short research paper.
