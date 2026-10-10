@@ -11,6 +11,8 @@ Contracts between modules. All geometry follows [CONVENTIONS.md](CONVENTIONS.md)
 | `Track` | `track_id`, `frame`, `bbox_xyxy`, `ppe_ok` (bool) | safety tracker | alert logic |
 | `HazardZone` | `id`, `polygon`/box in BIM frame (m), `kind` | data (BIM) | safety |
 | `SafetyAlert` | `timestamp`, `track_id`, `hazard_id`, `distance_m`, `reason` | safety | alert log (CSV/JSONL) |
+| `AdvisorQuery` *(draft, unsettled)* | TBD -- shape depends on the open "replace vs. augment" question in [VLM_ADVISOR.md](VLM_ADVISOR.md) | user | vlm advisor |
+| `AdvisorResponse` *(draft, unsettled)* | TBD -- same | vlm advisor | user |
 
 File formats: poses and statuses as JSON/JSONL, point clouds as PLY, meshes as OBJ/IFC, alerts as JSONL.
 

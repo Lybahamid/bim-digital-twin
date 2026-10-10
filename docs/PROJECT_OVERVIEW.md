@@ -12,15 +12,70 @@ The system answers three questions automatically:
 - **How much material is in place?** Volume estimates.
 - **Is anyone in danger?** Workers without proper PPE near hazards, with real distances.
 
-## 2. The Three Modules
+## 2. The Modules
 
 | Module | What it does | Main tools |
 |---|---|---|
 | 1. Progress monitoring (3D vision) | Rebuilds the site in 3D from photos, aligns it to the BIM, and compares with the schedule. Outputs per-element status, delay flags and material volume. | COLMAP, Open3D, registration + ICP |
 | 2. Safety monitoring (deep learning) | Detects and tracks workers, checks PPE, and measures real distance to hazards from a single camera. Outputs a safety alert log. | YOLO11, ByteTrack / BoT-SORT, Depth Anything V2 |
 | 3. Edge deployment (MLOps) | Shrinks the models so they run on a low-power device. Outputs a speed vs accuracy benchmark. | ONNX, TensorRT / OpenVINO, INT8 |
+| 4. VLM advisor (conversational) | Looks directly at site imagery/the reconstructed scene plus the structured status from modules 1-2, narrates what's done/missing/wrong/needed, and discusses it with the user. Must run on phone-class and medium-spec laptop hardware, so it shares Module 3's quantization/export path. See [VLM_ADVISOR.md](VLM_ADVISOR.md) for open design questions. | VLM (small/edge-deployable, not yet chosen), same edge pipeline as Module 3 |
 
 The 3D alignment tells us where the camera is in the building's coordinates, so safety distances are measured against real hazard zones from the BIM. Modules 1 and 2 are two halves of one system.
+
+### System Diagram
+
+A static PNG/PDF of this same diagram (for sharing outside GitHub) is at
+[diagrams/pipeline-architecture.png](diagrams/pipeline-architecture.png) /
+[diagrams/pipeline-architecture.pdf](diagrams/pipeline-architecture.pdf).
+
+```mermaid
+flowchart TD
+    IMG[Site photos / video]
+    IFC[IFC model + schedule]
+    DATAPREP[Data prep: ifc_export.py / schedule.py]
+    IFC --> DATAPREP
+
+    subgraph MOD1["Module 1 -- Progress monitoring (3D vision)"]
+        RECON[COLMAP + Open3D: align FPFH+RANSAC, then ICP]
+        COMPARE[Compare vs BIM per schedule date]
+        RECON -->|CameraPose, point cloud| COMPARE
+    end
+    IMG --> RECON
+    DATAPREP -->|BIMElement, schedule CSVs| COMPARE
+    COMPARE -->|ElementStatus| DASH[Dashboard / metrics]
+
+    subgraph MOD2["Module 2 -- Safety monitoring (deep learning)"]
+        DET[YOLO11 detector]
+        TRACK[ByteTrack / BoT-SORT tracker]
+        ALERT[Hazard distance + alert logic]
+        DET --> TRACK
+        TRACK -->|Track, PPE status| ALERT
+    end
+    IMG --> DET
+    DATAPREP -->|HazardZone| ALERT
+    RECON -.->|CameraPose| ALERT
+    ALERT -->|SafetyAlert| LOG[Alert log CSV/JSONL]
+
+    subgraph MOD4["Module 4 -- VLM advisor (conversational)"]
+        VLM["Vision-language model (small, edge-deployable -- not yet chosen)"]
+        USER((User))
+        VLM <-->|conversation| USER
+    end
+    RECON -.->|imagery / scene| VLM
+    COMPARE -.->|ElementStatus| VLM
+    ALERT -.->|SafetyAlert| VLM
+
+    subgraph MOD3["Module 3 -- Edge deployment (MLOps)"]
+        QUANT[Quantize + export: ONNX / TensorRT / OpenVINO, INT8]
+        BENCH[Speed vs accuracy benchmark]
+        QUANT --> BENCH
+    end
+    DET -.->|shrink| QUANT
+    TRACK -.->|shrink| QUANT
+    VLM -.->|shrink| QUANT
+    BENCH --> DEVICE[Phone / medium-spec laptop]
+```
 
 ## 3. Data Strategy
 

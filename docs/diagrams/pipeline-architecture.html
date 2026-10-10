@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>bimtwin pipeline diagram</title>
+<style>
+  @page { size: 16.67in 10.42in; margin: 0; }
+  html, body { margin: 0; padding: 0; background: #ffffff; }
+  svg { display: block; width: 1600px; height: 1000px; }
+</style>
+</head>
+<body>
+<svg viewBox="0 0 1600 1000" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#555"/>
+    </marker>
+    <marker id="arrowDashed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#888"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1600" height="1000" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="800" y="40" text-anchor="middle" font-size="26" font-weight="600" fill="#1a1a1a">bimtwin -- Whole-Pipeline Architecture</text>
+  <text x="800" y="64" text-anchor="middle" font-size="14" fill="#666">4D BIM-aligned digital twin &amp; automated progress / safety monitor</text>
+
+  <!-- ===== Inputs ===== -->
+  <rect x="30" y="110" width="170" height="54" rx="8" fill="#eef2f7" stroke="#8a97a8"/>
+  <text x="115" y="132" text-anchor="middle" font-size="13" fill="#222">Site photos</text>
+  <text x="115" y="150" text-anchor="middle" font-size="13" fill="#222">/ video</text>
+
+  <rect x="30" y="230" width="170" height="54" rx="8" fill="#eef2f7" stroke="#8a97a8"/>
+  <text x="115" y="252" text-anchor="middle" font-size="13" fill="#222">IFC model</text>
+  <text x="115" y="270" text-anchor="middle" font-size="13" fill="#222">+ schedule</text>
+
+  <!-- Data prep -->
+  <rect x="250" y="222" width="190" height="70" rx="8" fill="#eef2f7" stroke="#8a97a8"/>
+  <text x="345" y="248" text-anchor="middle" font-size="13" fill="#222">Data prep</text>
+  <text x="345" y="266" text-anchor="middle" font-size="11" fill="#555">ifc_export.py /</text>
+  <text x="345" y="280" text-anchor="middle" font-size="11" fill="#555">schedule.py</text>
+
+  <path d="M200,257 H250" stroke="#555" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- ===== Module 1 band ===== -->
+  <rect x="470" y="95" width="1080" height="150" rx="10" fill="#eaf2ff" stroke="#9db8e8" stroke-dasharray="4 3"/>
+  <text x="488" y="116" font-size="13" font-weight="600" fill="#2255aa">Module 1 -- Progress monitoring (3D vision)</text>
+
+  <rect x="490" y="140" width="200" height="60" rx="8" fill="#ffffff" stroke="#5b7fb5"/>
+  <text x="590" y="163" text-anchor="middle" font-size="12.5" fill="#222">COLMAP + Open3D</text>
+  <text x="590" y="180" text-anchor="middle" font-size="11.5" fill="#555">align (FPFH+RANSAC) + ICP</text>
+
+  <rect x="740" y="140" width="210" height="60" rx="8" fill="#ffffff" stroke="#5b7fb5"/>
+  <text x="845" y="163" text-anchor="middle" font-size="12.5" fill="#222">Compare vs BIM</text>
+  <text x="845" y="180" text-anchor="middle" font-size="11.5" fill="#555">per schedule date</text>
+
+  <rect x="1000" y="140" width="190" height="60" rx="8" fill="#ffffff" stroke="#5b7fb5"/>
+  <text x="1095" y="163" text-anchor="middle" font-size="12.5" fill="#222">Dashboard /</text>
+  <text x="1095" y="180" text-anchor="middle" font-size="11.5" fill="#555">metrics</text>
+
+  <rect x="1260" y="140" width="180" height="60" rx="8" fill="#ffffff" stroke="#5b7fb5"/>
+  <text x="1350" y="163" text-anchor="middle" font-size="12.5" fill="#222">BIMElement +</text>
+  <text x="1350" y="180" text-anchor="middle" font-size="11.5" fill="#555">schedule CSVs</text>
+
+  <path d="M115,164 V340 H470" stroke="#555" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+  <path d="M690,170 H740" stroke="#555" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+  <text x="715" y="162" text-anchor="middle" font-size="10.5" fill="#555">CameraPose +</text>
+  <text x="715" y="196" text-anchor="middle" font-size="10.5" fill="#555">point cloud</text>
+  <path d="M950,170 H1000" stroke="#555" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+  <text x="975" y="162" text-anchor="middle" font-size="10.5" fill="#555">Element-</text>
+  <text x="975" y="196" text-anchor="middle" font-size="10.5" fill="#555">Status</text>
+  <path d="M440,250 H1350 V200" stroke="#555" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- ===== Module 2 band ===== -->
+  <rect x="470" y="300" width="1080" height="160" rx="10" fill="#fff1e6" stroke="#e0ab7d" stroke-dasharray="4 3"/>
+  <text x="488" y="321" font-size="13" font-weight="600" fill="#a85c1a">Module 2 -- Safety monitoring (deep learning)</text>
+
+  <rect x="490" y="345" width="170" height="60" rx="8" fill="#ffffff" stroke="#c98a4e"/>
+  <text x="575" y="368" text-anchor="middle" font-size="12.5" fill="#222">YOLO11</text>
+  <text x="575" y="385" text-anchor="middle" font-size="11.5" fill="#555">detector</text>
+
+  <rect x="700" y="345" width="200" height="60" rx="8" fill="#ffffff" stroke="#c98a4e"/>
+  <text x="800" y="368" text-anchor="middle" font-size="12.5" fill="#222">ByteTrack / BoT-SORT</text>
+  <text x="800" y="385" text-anchor="middle" font-size="11.5" fill="#555">tracker</text>
+
+  <rect x="960" y="345" width="220" height="60" rx="8" fill="#ffffff" stroke="#c98a4e"/>
+  <text x="1070" y="368" text-anchor="middle" font-size="12.5" fill="#222">Hazard distance +</text>
+  <text x="1070" y="385" text-anchor="middle" font-size="11.5" fill="#555">alert logic</text>
+
+  <rect x="1260" y="345" width="180" height="60" rx="8" fill="#ffffff" stroke="#c98a4e"/>
+  <text x="1350" y="368" text-anchor="middle" font-size="12.5" fill="#222">Alert log</text>
+  <text x="1350" y="385" text-anchor="middle" font-size="11.5" fill="#555">(CSV / JSONL)</text>
+
+  <path d="M115,164 V375 H490" stroke="#555" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+  <path d="M660,375 H700" stroke="#555" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+  <path d="M900,375 H960" stroke="#555" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+  <text x="930" y="367" text-anchor="middle" font-size="10.5" fill="#555">Track,</text>
+  <text x="930" y="401" text-anchor="middle" font-size="10.5" fill="#555">PPE status</text>
+  <path d="M1180,375 H1260" stroke="#555" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+  <text x="1220" y="367" text-anchor="middle" font-size="10.5" fill="#555">Safety-</text>
+  <text x="1220" y="401" text-anchor="middle" font-size="10.5" fill="#555">Alert</text>
+
+  <!-- CameraPose feeding into alert logic, from recon box down -->
+  <path d="M590,200 V280 Q590,300 630,300 H1070 V345" stroke="#888" stroke-width="1.4" fill="none" stroke-dasharray="5 4" marker-end="url(#arrowDashed)"/>
+  <text x="900" y="294" text-anchor="middle" font-size="10.5" fill="#777">CameraPose</text>
+
+  <!-- HazardZone from data prep down into alert logic -->
+  <path d="M345,292 V430 Q345,445 365,445 H960" stroke="#888" stroke-width="1.4" fill="none" stroke-dasharray="5 4" marker-end="url(#arrowDashed)"/>
+  <text x="640" y="438" text-anchor="middle" font-size="10.5" fill="#777">HazardZone</text>
+
+  <!-- ===== Module 4 band ===== -->
+  <rect x="470" y="520" width="700" height="160" rx="10" fill="#f3ecfb" stroke="#b79bdb" stroke-dasharray="4 3"/>
+  <text x="488" y="541" font-size="13" font-weight="600" fill="#6a3fa0">Module 4 -- VLM advisor (conversational)</text>
+
+  <rect x="700" y="565" width="220" height="70" rx="8" fill="#ffffff" stroke="#9a74c9"/>
+  <text x="810" y="590" text-anchor="middle" font-size="12.5" fill="#222">Vision-language model</text>
+  <text x="810" y="607" text-anchor="middle" font-size="11" fill="#555">(small, edge-deployable --</text>
+  <text x="810" y="621" text-anchor="middle" font-size="11" fill="#555">not yet chosen)</text>
+
+  <circle cx="1060" cy="600" r="42" fill="#ffffff" stroke="#9a74c9"/>
+  <text x="1060" y="605" text-anchor="middle" font-size="13" fill="#222">User</text>
+
+  <path d="M920,590 H1018" stroke="#555" stroke-width="1.6" fill="none" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+  <text x="970" y="580" text-anchor="middle" font-size="10.5" fill="#555">conversation</text>
+
+  <!-- imagery/scene from recon down to VLM -->
+  <path d="M590,200 V500 Q590,558 630,558 H790 V565" stroke="#888" stroke-width="1.4" fill="none" stroke-dasharray="5 4" marker-end="url(#arrowDashed)"/>
+  <text x="640" y="552" text-anchor="middle" font-size="10.5" fill="#777">imagery / scene</text>
+
+  <!-- ElementStatus from compare-vs-BIM down to VLM -->
+  <path d="M845,200 V565" stroke="#888" stroke-width="1.4" fill="none" stroke-dasharray="5 4" marker-end="url(#arrowDashed)"/>
+  <text x="900" y="400" text-anchor="middle" font-size="10.5" fill="#777" transform="rotate(90 900 400)" opacity="0">.</text>
+  <text x="862" y="430" font-size="10.5" fill="#777">ElementStatus</text>
+
+  <!-- SafetyAlert from alert logic down to VLM -->
+  <path d="M1070,405 V480 Q1070,500 1040,500 H870 V565" stroke="#888" stroke-width="1.4" fill="none" stroke-dasharray="5 4" marker-end="url(#arrowDashed)"/>
+  <text x="960" y="494" text-anchor="middle" font-size="10.5" fill="#777">SafetyAlert</text>
+
+  <!-- ===== Module 3 band (bottom, spans model-producing boxes) ===== -->
+  <rect x="470" y="780" width="1080" height="130" rx="10" fill="#eaf7ee" stroke="#8ec4a0" stroke-dasharray="4 3"/>
+  <text x="488" y="801" font-size="13" font-weight="600" fill="#2e7d46">Module 3 -- Edge deployment (MLOps)</text>
+
+  <rect x="500" y="818" width="320" height="70" rx="8" fill="#ffffff" stroke="#6aa882"/>
+  <text x="660" y="844" text-anchor="middle" font-size="12.5" fill="#222">Quantize + export</text>
+  <text x="660" y="862" text-anchor="middle" font-size="11.5" fill="#555">ONNX / TensorRT / OpenVINO, INT8</text>
+
+  <rect x="880" y="818" width="300" height="70" rx="8" fill="#ffffff" stroke="#6aa882"/>
+  <text x="1030" y="844" text-anchor="middle" font-size="12.5" fill="#222">Speed vs. accuracy</text>
+  <text x="1030" y="862" text-anchor="middle" font-size="11.5" fill="#555">benchmark</text>
+
+  <rect x="1260" y="818" width="180" height="70" rx="8" fill="#ffffff" stroke="#6aa882"/>
+  <text x="1350" y="844" text-anchor="middle" font-size="12.5" fill="#222">Phone / medium-</text>
+  <text x="1350" y="862" text-anchor="middle" font-size="11.5" fill="#555">spec laptop</text>
+
+  <path d="M820,853 H880" stroke="#555" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+  <path d="M1180,853 H1260" stroke="#555" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- shrink arrows from the three model-producing boxes down into Module 3 -->
+  <path d="M575,405 V818" stroke="#888" stroke-width="1.4" fill="none" stroke-dasharray="5 4" marker-end="url(#arrowDashed)"/>
+  <path d="M800,405 V818" stroke="#888" stroke-width="1.4" fill="none" stroke-dasharray="5 4" marker-end="url(#arrowDashed)"/>
+  <path d="M810,635 V818" stroke="#888" stroke-width="1.4" fill="none" stroke-dasharray="5 4" marker-end="url(#arrowDashed)"/>
+  <text x="695" y="760" text-anchor="middle" font-size="10.5" fill="#777">detector / tracker / VLM models -- shrink for low-power devices</text>
+
+  <!-- Legend -->
+  <rect x="30" y="920" width="14" height="14" fill="none" stroke="#555"/>
+  <text x="52" y="932" font-size="11.5" fill="#444">solid arrow = primary data flow</text>
+  <line x1="260" y1="927" x2="290" y2="927" stroke="#888" stroke-width="1.4" stroke-dasharray="5 4"/>
+  <text x="300" y="932" font-size="11.5" fill="#444">dashed arrow = secondary / cross-module input</text>
+</svg>
+</body>
+</html>
